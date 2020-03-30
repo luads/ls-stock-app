@@ -17,6 +17,7 @@ class PositiveTransaction extends Fixture
     {
         $transaction = (new Transaction())
             ->setUser(self::USER)
+            ->setOperation(Transaction::OPERATION_DEPOSIT)
             ->setBalance(80.5);
 
         $manager->persist($transaction);

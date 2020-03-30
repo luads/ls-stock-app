@@ -25,7 +25,7 @@ class TransactionService
         return $this->transactionRepository->getUserBalance($user);
     }
 
-    public function push(string $user, float $value): Transaction
+    public function push(string $user, float $value, string $operation = null): Transaction
     {
         $currentBalance = $this->getCurrentBalance($user);
         $newBalance = $currentBalance + $value;
@@ -34,8 +34,13 @@ class TransactionService
             throw new InsufficientFundsException('Not enough funds available to perform transaction');
         }
 
+        if (!$operation) {
+            $operation = ($value > 0) ? Transaction::OPERATION_DEPOSIT : Transaction::OPERATION_WITHDRAW;
+        }
+
         $transaction = (new Transaction())
             ->setUser($user)
+            ->setOperation($operation)
             ->setBalance($value);
 
         return $this->transactionModel->create($transaction);

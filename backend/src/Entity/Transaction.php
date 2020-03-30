@@ -13,6 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Transaction
 {
+    public const OPERATION_DEPOSIT = 'deposit';
+    public const OPERATION_PURCHASE = 'purchase';
+    public const OPERATION_WITHDRAW = 'withdraw';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -24,6 +28,11 @@ class Transaction
      * @ORM\Column(type="string")
      */
     private string $user;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private string $operation;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=5)
@@ -59,6 +68,17 @@ class Transaction
     public function setUser(string $user): Transaction
     {
         $this->user = $user;
+        return $this;
+    }
+
+    public function getOperation(): string
+    {
+        return $this->operation;
+    }
+
+    public function setOperation(string $operation): Transaction
+    {
+        $this->operation = $operation;
         return $this;
     }
 
