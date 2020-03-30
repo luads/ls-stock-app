@@ -2,7 +2,7 @@ ssh:
 	docker exec -it stock-app-api-fpm sh
 
 test:
-	docker exec -it stock-app-api-fpm bin/phpunit
+	docker exec -it stock-app-api-fpm vendor/bin/phpunit --testdox
 
 build-prod-image:
 	docker build -t registry.heroku.com/ls-stock-api/web -f Dockerfile .
