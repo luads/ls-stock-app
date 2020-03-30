@@ -24,15 +24,11 @@ class BalanceController
     }
 
     /**
-     * @Route("", methods={"GET"})
+     * @Route("", name="balance_show", methods={"GET"})
      */
     public function getBalance(Request $request): Response
     {
         $user = $request->headers->get('X-User');
-
-        if (!$user) {
-            throw new BadRequestHttpException('Invalid user');
-        }
 
         return new JsonResponse([
             'balance' => $this->transactionService->getCurrentBalance($user),
@@ -40,17 +36,13 @@ class BalanceController
     }
 
     /**
-     * @Route("/transaction", methods={"POST"})
+     * @Route("/transaction", name="balance_transaction", methods={"POST"})
      */
     public function createTransaction(Request $request): Response
     {
         $user = $request->headers->get('X-User');
         $payload = json_decode($request->getContent(), true);
         $balance = $payload['balance'] ?? null;
-
-        if (!$user) {
-            throw new BadRequestHttpException('Invalid user');
-        }
 
         if (!is_numeric($balance)) {
             throw new BadRequestHttpException('Invalid balance value');

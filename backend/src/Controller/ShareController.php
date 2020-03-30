@@ -24,7 +24,7 @@ class ShareController
     }
 
     /**
-     * @Route("/{name}", methods={"GET"})
+     * @Route("/{name}", name="share_detail", methods={"GET"})
      */
     public function get(string $name): Response
     {
@@ -34,7 +34,7 @@ class ShareController
     }
 
     /**
-     * @Route("/{name}/purchase", methods={"POST"})
+     * @Route("/{name}/purchase", name="share_purchase", methods={"POST"})
      */
     public function purchase(Request $request, string $name): Response
     {
@@ -42,12 +42,8 @@ class ShareController
         $payload = json_decode($request->getContent(), true);
         $quantity = $payload['quantity'] ?? 0;
 
-        if (!$user) {
-            throw new BadRequestHttpException('Invalid user');
-        }
-
         if (!is_numeric($quantity) || $quantity < 1) {
-            throw new BadRequestHttpException('Quantity of shares needs to be positive');
+            throw new BadRequestHttpException('Quantity of shares to purchase needs to be positive');
         }
 
         $transaction = $this->sharesService->purchase($user, $name, $quantity);
@@ -58,7 +54,7 @@ class ShareController
     }
 
     /**
-     * @Route("/{name}/sell", methods={"POST"})
+     * @Route("/{name}/sell", name="share_sale", methods={"POST"})
      */
     public function sell(Request $request, string $name): Response
     {
@@ -66,12 +62,8 @@ class ShareController
         $payload = json_decode($request->getContent(), true);
         $quantity = $payload['quantity'] ?? 0;
 
-        if (!$user) {
-            throw new BadRequestHttpException('Invalid user');
-        }
-
         if (!is_numeric($quantity) || $quantity < 1) {
-            throw new BadRequestHttpException('Quantity of shares needs to be positive');
+            throw new BadRequestHttpException('Quantity of shares to sell needs to be positive');
         }
 
         $transaction = $this->sharesService->sell($user, $name, $quantity);
