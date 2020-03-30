@@ -7,8 +7,11 @@ run:
 stop:
 	docker-compose down
 
-api-ssh:
+ssh-api:
 	docker exec -it stock-app-api-fpm sh
+
+test-api:
+	docker exec -it stock-app-api-fpm bin/phpunit
 
 build-prod-api:
 	docker build -t registry.heroku.com/ls-stock-api/web -f backend/Dockerfile backend
