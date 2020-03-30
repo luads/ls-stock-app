@@ -24,6 +24,22 @@ class BalanceController
     }
 
     /**
+     * @Route("", methods={"GET"})
+     */
+    public function getBalance(Request $request): Response
+    {
+        $user = $request->headers->get('X-User');
+
+        if (!$user) {
+            throw new BadRequestHttpException('Invalid user');
+        }
+
+        return new JsonResponse([
+            'balance' => $this->transactionService->getCurrentBalance($user),
+        ]);
+    }
+
+    /**
      * @Route("/transaction", methods={"POST"})
      */
     public function createTransaction(Request $request): Response
