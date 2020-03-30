@@ -15,6 +15,18 @@ class ShareRepository extends ServiceEntityRepository
         parent::__construct($registry, Share::class);
     }
 
+    /**
+     * @return Share[]
+     */
+    public function listByUser(string $user): array
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findOneByUserAndName(string $user, string $name): ?Share
     {
         return $this->createQueryBuilder('s')
@@ -24,6 +36,7 @@ class ShareRepository extends ServiceEntityRepository
                 'user' => $user,
                 'name' => $name,
             ])
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
     }

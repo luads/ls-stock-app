@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\ShareRepository;
 use App\Service\SharesService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,10 +18,33 @@ use Symfony\Component\Routing\Annotation\Route;
 class ShareController
 {
     private SharesService $sharesService;
+    private ShareRepository $repository;
 
-    public function __construct(SharesService $sharesService)
+    public function __construct(SharesService $sharesService, ShareRepository $repository)
     {
         $this->sharesService = $sharesService;
+        $this->repository = $repository;
+    }
+
+    /**
+     * @Route("", name="share_list", methods={"GET"})
+     */
+    public function list(Request $request): Response
+    {
+        $user = $request->headers->get('X-User');
+
+        $shares = $this->repository->listByUser($user);
+        $response = [];
+
+        foreach ($shares as $share) {
+            $response[] = [
+                'name' => $share->getName(),
+                'quantity' => $share->getQuantity(),
+                'last_update' => $share->getUpdatedAt()->format('c'),
+            ];
+        }
+
+        return new JsonResponse($response);
     }
 
     /**
