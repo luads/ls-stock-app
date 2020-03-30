@@ -53,7 +53,31 @@ class ShareController
         $transaction = $this->sharesService->purchase($user, $name, $quantity);
 
         return new JsonResponse([
-            'transaction_price' => abs($transaction->getBalance()),
+            'transaction_value' => abs($transaction->getBalance()),
         ], Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route("/{name}/sell", methods={"POST"})
+     */
+    public function sell(Request $request, string $name): Response
+    {
+        $user = $request->headers->get('X-User');
+        $payload = json_decode($request->getContent(), true);
+        $quantity = $payload['quantity'] ?? 0;
+
+        if (!$user) {
+            throw new BadRequestHttpException('Invalid user');
+        }
+
+        if (!is_numeric($quantity) || $quantity < 1) {
+            throw new BadRequestHttpException('Quantity of shares needs to be positive');
+        }
+
+        $transaction = $this->sharesService->sell($user, $name, $quantity);
+
+        return new JsonResponse([
+            'transaction_value' => $transaction->getBalance(),
+        ]);
     }
 }

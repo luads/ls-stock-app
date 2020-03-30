@@ -15,6 +15,7 @@ class Transaction
 {
     public const OPERATION_DEPOSIT = 'deposit';
     public const OPERATION_PURCHASE = 'purchase';
+    public const OPERATION_SALE = 'sale';
     public const OPERATION_WITHDRAW = 'withdraw';
 
     /**

@@ -20,6 +20,11 @@ class ShareModel
         $this->repository = $repository;
     }
 
+    public function getUserShares(string $user, string $name): ?Share
+    {
+        return $this->repository->findOneByUserAndName($user, $name);
+    }
+
     public function createOrUpdate(string $user, string $name, int $quantity): Share
     {
         $share = $this->repository->findOneByUserAndName($user, $name);
