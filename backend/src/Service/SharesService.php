@@ -5,16 +5,22 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Transaction;
+use App\Model\ShareModel;
 use App\Share\ApiClientInterface;
 use App\Share\ShareDetails;
 
 class SharesService
 {
+    private ShareModel $shareModel;
     private ApiClientInterface $sharesClient;
     private TransactionService $transactionService;
 
-    public function __construct(ApiClientInterface $sharesClient, TransactionService $transactionService)
-    {
+    public function __construct(
+        ShareModel $shareModel,
+        ApiClientInterface $sharesClient,
+        TransactionService $transactionService
+    ) {
+        $this->shareModel = $shareModel;
         $this->sharesClient = $sharesClient;
         $this->transactionService = $transactionService;
     }
@@ -29,6 +35,8 @@ class SharesService
         $share = $this->getDetails($shareName);
 
         $value = $share->getPrice() * $quantity * -1;
+
+        $this->shareModel->createOrUpdate($user, $shareName, $quantity);
 
         return $this->transactionService->push($user, $value, Transaction::OPERATION_PURCHASE);
     }
