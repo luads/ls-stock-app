@@ -30,9 +30,7 @@ class ShareController
     {
         $details = $this->sharesService->getDetails($name);
 
-        return new JsonResponse([
-            $details,
-        ]);
+        return new JsonResponse($details->jsonSerialize());
     }
 
     /**
@@ -52,8 +50,10 @@ class ShareController
             throw new BadRequestHttpException('Quantity of shares needs to be positive');
         }
 
-        $this->sharesService->purchase($user, $name, $quantity);
+        $transaction = $this->sharesService->purchase($user, $name, $quantity);
 
-        return new JsonResponse([], Response::HTTP_CREATED);
+        return new JsonResponse([
+            'transaction_price' => $transaction->getBalance(),
+        ], Response::HTTP_CREATED);
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Share;
 
-class ShareDetails
+use JsonSerializable;
+
+class ShareDetails implements JsonSerializable
 {
     private string $name;
     private float $price;
@@ -13,6 +15,14 @@ class ShareDetails
     {
         $this->name = $name;
         $this->price = $price;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'name' => $this->getName(),
+            'price' => $this->getPrice(),
+        ];
     }
 
     public function getName(): string
