@@ -28,7 +28,7 @@ class SharesService
     {
         $share = $this->getDetails($shareName);
 
-        $value = $share->getPrice() * $quantity;
+        $value = $share->getPrice() * $quantity * -1;
 
         return $this->transactionService->push($user, $value, Transaction::OPERATION_PURCHASE);
     }

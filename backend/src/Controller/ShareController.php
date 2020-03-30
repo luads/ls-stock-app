@@ -53,7 +53,7 @@ class ShareController
         $transaction = $this->sharesService->purchase($user, $name, $quantity);
 
         return new JsonResponse([
-            'transaction_price' => $transaction->getBalance(),
+            'transaction_price' => abs($transaction->getBalance()),
         ], Response::HTTP_CREATED);
     }
 }
