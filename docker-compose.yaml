@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+    ls-stock-app-api:
+        container_name: stock-app-api-fpm
+        build:
+            context: ./backend/
+            dockerfile: Dockerfile
+            args:
+                - DEV=true
+        restart: always
+        environment:
+            PORT: 8000
+        volumes:
+            - "./backend/:/var/www"
+        ports:
+            - 8000:8000
+
