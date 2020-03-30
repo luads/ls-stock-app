@@ -1,4 +1,6 @@
 parameters:
+    alpha_vantage.api.host: https://www.alphavantage.co
+    alpha_vantage.api.key: '%env(ALPHA_VANTAGE_API_KEY)%'
 
 services:
     _defaults:
@@ -15,4 +17,13 @@ services:
 
     App\Service\SharesService:
         bind:
-            $sharesClient: '@App\Share\Quandl\ApiClient'
+            $sharesClient: '@App\Share\AlphaVantage\ApiClient'
+
+    App\Share\AlphaVantage\ApiClient:
+        arguments: ['@share.alpha_vantage.http_client', '%alpha_vantage.api.key%']
+
+    share.alpha_vantage.http_client:
+        class: GuzzleHttp\Client
+        arguments:
+            -   base_uri: '%alpha_vantage.api.host%'
+                http_errors: false
