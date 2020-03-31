@@ -1,16 +1,37 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Container, Typography} from '@material-ui/core';
 import LoginForm from './components/LoginForm';
-
+import Dashboard from './components/Dashboard';
+import UserHandler from './utils/UserHandler';
 
 function App() {
+  const userHandler = new UserHandler();
+  const [user, setUser] = useState<string|null>(userHandler.getLoggedInUser());
+
+  useEffect(() => {
+    if (user) {
+      userHandler.authenticate(user);
+    }
+  }, [user]);
+
+  const logout = () => {
+    userHandler.logout();
+    setUser('');
+  };
+
   return (
-    <Container component="main" maxWidth="sm" className="App">
-      <Typography component="h1" variant="h5">
+    <Container component="main" maxWidth={user ? 'md' : 'sm'} className="App">
+      <Typography component="h1" variant="h4">
         Stock App
       </Typography>
-      <LoginForm />
+
+      { user ? (
+        <Dashboard user={user} logout={logout} />
+      ) : (
+        <LoginForm authenticate={setUser} />
+      )}
+
     </Container>
   );
 }
