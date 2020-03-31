@@ -5,3 +5,16 @@
 .login-form {
   padding: 2vmin 0;
 }
+
+.logout {
+  float: right;
+}
+
+.card-title {
+  padding: 15px 0;
+}
+
+.loader {
+  margin-top: 3vmin;
+  opacity: .4;
+}
