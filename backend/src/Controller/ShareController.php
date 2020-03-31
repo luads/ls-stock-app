@@ -27,7 +27,7 @@ class ShareController
     }
 
     /**
-     * @Route("", name="share_list", methods={"GET"})
+     * @Route("", name="share_list", methods={"GET", "OPTIONS"})
      */
     public function list(Request $request): Response
     {
@@ -48,7 +48,7 @@ class ShareController
     }
 
     /**
-     * @Route("/{name}", name="share_detail", methods={"GET"})
+     * @Route("/{name}", name="share_detail", methods={"GET", "OPTIONS"})
      */
     public function get(string $name): Response
     {
@@ -58,7 +58,7 @@ class ShareController
     }
 
     /**
-     * @Route("/{name}/purchase", name="share_purchase", methods={"POST"})
+     * @Route("/{name}/purchase", name="share_purchase", methods={"POST", "OPTIONS"})
      */
     public function purchase(Request $request, string $name): Response
     {
@@ -78,7 +78,7 @@ class ShareController
     }
 
     /**
-     * @Route("/{name}/sell", name="share_sale", methods={"POST"})
+     * @Route("/{name}/sell", name="share_sale", methods={"POST", "OPTIONS"})
      */
     public function sell(Request $request, string $name): Response
     {

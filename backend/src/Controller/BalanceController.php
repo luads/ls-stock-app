@@ -24,7 +24,7 @@ class BalanceController
     }
 
     /**
-     * @Route("", name="balance_show", methods={"GET"})
+     * @Route("", name="balance_show", methods={"GET", "OPTIONS"})
      */
     public function getBalance(Request $request): Response
     {
@@ -36,7 +36,7 @@ class BalanceController
     }
 
     /**
-     * @Route("/transaction", name="balance_transaction", methods={"POST"})
+     * @Route("/transaction", name="balance_transaction", methods={"POST", "OPTIONS"})
      */
     public function createTransaction(Request $request): Response
     {
