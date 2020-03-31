@@ -23,3 +23,17 @@ services:
         image: redis
         ports:
             - '6379:6389'
+
+    ls-stock-app-ui:
+        container_name: stock-app-ui
+        build:
+            context: ./frontend/
+            dockerfile: Dockerfile
+        command: ['serve', '-s', 'build', '-l', '5000']
+        restart: always
+        links:
+            - ls-stock-app-api
+        volumes:
+            - './frontend/:/app'
+        ports:
+            - 5000:5000
