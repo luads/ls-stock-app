@@ -72,6 +72,7 @@ export default function SharesTableItem({ share, stockClient, reloadShares, relo
       Transaction value: $${transactionValue.toFixed(2)}`;
 
     setModalOpen(false);
+    setSharesToSell(share.quantity);
 
     displayAlert({
       severity: 'success',

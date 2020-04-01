@@ -56,6 +56,7 @@ export default function SharePurchaseDialog({ stockClient, share, setShare, relo
       Transaction cost: $${transactionValue.toFixed(2)}`;
 
     setShare(null);
+    setSharesToPurchase(0);
 
     displayAlert({ severity: 'success', text: alertText } as AlertDetails)
   };
