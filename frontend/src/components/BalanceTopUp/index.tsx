@@ -1,17 +1,20 @@
-import React, {FormEvent, useEffect} from 'react';
+import React, {FormEvent, useContext, useEffect} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@material-ui/core';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import {trackPromise} from 'react-promise-tracker';
 import StockClient from '../../clients/StockClient';
+import {AlertDetails, useDisplayAlert} from '../../hooks/useDisplayAlert';
+import {AppContext} from '../../context/AppContext';
 
 interface Props {
-  user: string;
   stockClient: StockClient;
   setBalance(balance: number): void;
 }
 
-export default function BalanceTopUp({ user, stockClient, setBalance }: Props) {
-  const [isModelOpen, setModalOpen] = React.useState(false);
+export default function BalanceTopUp({ stockClient, setBalance }: Props) {
+  const { user } = useContext(AppContext);
+  const displayAlert = useDisplayAlert();
+  const [isModalOpen, setModalOpen] = React.useState(false);
   const [topUpBalance, setTopUpBalance] = React.useState<number>(0);
 
   const handleModalClose = () => {
@@ -27,6 +30,8 @@ export default function BalanceTopUp({ user, stockClient, setBalance }: Props) {
     }
 
     const newBalance = await trackPromise(stockClient.sendTransaction(user, topUpBalance));
+
+    displayAlert({ severity: 'success', text: 'Balance transaction handled successfully!'} as AlertDetails);
     setBalance(newBalance);
 
     handleModalClose();
@@ -46,7 +51,7 @@ export default function BalanceTopUp({ user, stockClient, setBalance }: Props) {
         Top up
       </Button>
 
-      <Dialog open={isModelOpen} onClose={handleModalClose} aria-labelledby="form-dialog-title">
+      <Dialog open={isModalOpen} onClose={handleModalClose} aria-labelledby="form-dialog-title">
         <form onSubmit={handleSubmit}>
           <DialogTitle id="form-dialog-title">Top up your balance</DialogTitle>
           <DialogContent>

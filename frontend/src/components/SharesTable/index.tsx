@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import StockClient from '../../clients/StockClient';
 import {
   Grid,
@@ -15,13 +15,14 @@ import SharesTableItem from '../SharesTableItem';
 import Share from '../../interfaces/Share';
 import NumberFormat from 'react-number-format';
 import {trackPromise} from 'react-promise-tracker';
+import {AppContext} from '../../context/AppContext';
 
 interface Props {
-  user: string;
   stockClient: StockClient;
 }
 
-export default function SharesTable({ user, stockClient }: Props) {
+export default function SharesTable({ stockClient }: Props) {
+  const { user } = useContext(AppContext);
   const [shares, setShares] = useState<Share[]>([]);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function SharesTable({ user, stockClient }: Props) {
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
+                <TableCell>Symbol</TableCell>
                 <TableCell>Shares</TableCell>
                 <TableCell align="right">Current value</TableCell>
               </TableRow>

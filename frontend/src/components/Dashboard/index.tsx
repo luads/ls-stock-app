@@ -1,17 +1,21 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Button, Grid, LinearProgress, Typography} from '@material-ui/core';
 import StockClient from '../../clients/StockClient';
 import Balance from '../Balance';
 import BalanceTopUp from '../BalanceTopUp';
 import SharesTable from '../SharesTable';
 import {usePromiseTracker} from 'react-promise-tracker';
+import SharePurchase from '../SharePurchase';
+import {useDisplayAlert} from '../../hooks/useDisplayAlert';
+import {Alert} from '@material-ui/lab';
+import {AppContext} from '../../context/AppContext';
 
 interface Props {
-  user: string;
   logout(): void;
 }
 
-export default function Dashboard({ user, logout }: Props) {
+export default function Dashboard({ logout }: Props) {
+  const { user, alertDetails, displayAlert } = useContext(AppContext);
   const [balance, setBalance] = useState<number>(0);
   const stockClient = new StockClient();
   const { promiseInProgress } = usePromiseTracker();
@@ -26,7 +30,6 @@ export default function Dashboard({ user, logout }: Props) {
         </Grid>
         <Grid item xs={3}>
           <BalanceTopUp
-            user={user}
             stockClient={stockClient}
             setBalance={setBalance}
           />
@@ -34,9 +37,15 @@ export default function Dashboard({ user, logout }: Props) {
         </Grid>
       </Grid>
 
-      <SharesTable user={user} stockClient={stockClient}/>
+      <SharesTable stockClient={stockClient}/>
 
       {promiseInProgress && <LinearProgress className="loader"/>}
+
+      {alertDetails ? (
+        <Alert severity={alertDetails.severity} className="alerts" onClose={() => displayAlert(null)}>
+          {alertDetails.text}
+        </Alert>
+      ) : ''}
     </div>
   );
 }
