@@ -22,6 +22,7 @@ class ShareRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->where('s.user = :user')
+            ->orderBy('s.name')
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult();

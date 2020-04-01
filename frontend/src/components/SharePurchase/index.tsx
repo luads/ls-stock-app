@@ -16,9 +16,10 @@ import {AppContext} from '../../context/AppContext';
 
 interface Props {
   stockClient: StockClient;
+  reloadShares: any;
 }
 
-export default function SharePurchase({ stockClient }: Props) {
+export default function SharePurchase({ stockClient, reloadShares }: Props) {
   const { user } = useContext(AppContext);
   const displayAlert = useDisplayAlert();
   const [shareToSearch, setShareToSearch] = useState<string>('');
@@ -71,7 +72,7 @@ export default function SharePurchase({ stockClient }: Props) {
         />
       </form>
 
-      <SharePurchaseDialog stockClient={stockClient} share={share} setShare={setShare}/>
+      <SharePurchaseDialog stockClient={stockClient} share={share} setShare={setShare} reloadShares={reloadShares}/>
     </Grid>
   );
 }

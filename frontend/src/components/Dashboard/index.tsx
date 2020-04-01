@@ -4,10 +4,11 @@ import StockClient from '../../clients/StockClient';
 import Balance from '../Balance';
 import BalanceTopUp from '../BalanceTopUp';
 import SharesTable from '../SharesTable';
-import {usePromiseTracker} from 'react-promise-tracker';
+import {trackPromise, usePromiseTracker} from 'react-promise-tracker';
 import SharePurchase from '../SharePurchase';
 import {Alert} from '@material-ui/lab';
 import {AppContext} from '../../context/AppContext';
+import Share from '../../interfaces/Share';
 
 interface Props {
   logout(): void;
@@ -16,8 +17,14 @@ interface Props {
 export default function Dashboard({ logout }: Props) {
   const { user, alertDetails, displayAlert } = useContext(AppContext);
   const [balance, setBalance] = useState<number>(0);
+  const [shares, setShares] = useState<Share[]>([]);
+
   const stockClient = new StockClient();
   const { promiseInProgress } = usePromiseTracker();
+
+  const reloadShares = async () => {
+      setShares(await trackPromise(stockClient.getHoldings(user)));
+  };
 
   return (
     <div className="dashboard">
@@ -33,8 +40,8 @@ export default function Dashboard({ logout }: Props) {
         </Grid>
       </Grid>
 
-      <SharesTable stockClient={stockClient}/>
-      <SharePurchase stockClient={stockClient}/>
+      <SharesTable shares={shares} reloadShares={reloadShares}/>
+      <SharePurchase stockClient={stockClient} reloadShares={reloadShares}/>
 
       {promiseInProgress && <LinearProgress className="loader"/>}
 

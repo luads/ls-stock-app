@@ -19,11 +19,11 @@ import {trackPromise} from 'react-promise-tracker';
 interface Props {
   stockClient: StockClient;
   share: ShareDetail | null;
-
-  setShare(share: ShareDetail | null): any;
+  setShare: any;
+  reloadShares: any;
 }
 
-export default function SharePurchaseDialog({ stockClient, share, setShare }: Props) {
+export default function SharePurchaseDialog({ stockClient, share, setShare, reloadShares }: Props) {
   const { user } = useContext(AppContext);
   const displayAlert = useDisplayAlert();
   const [sharesToPurchase, setSharesToPurchase] = useState<number>(0);
@@ -43,6 +43,7 @@ export default function SharePurchaseDialog({ stockClient, share, setShare }: Pr
 
     try {
       transactionValue = await trackPromise(stockClient.purchase(user, share.name, sharesToPurchase));
+      reloadShares();
     } catch (error) {
       setShare(null);
       displayAlert({ severity: 'error', text: error.message });

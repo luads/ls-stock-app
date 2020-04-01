@@ -1,5 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
-import StockClient from '../../clients/StockClient';
+import React, {useEffect} from 'react';
 import {
   Grid,
   Paper,
@@ -14,23 +13,15 @@ import {
 import SharesTableItem from '../SharesTableItem';
 import Share from '../../interfaces/Share';
 import NumberFormat from 'react-number-format';
-import {trackPromise} from 'react-promise-tracker';
-import {AppContext} from '../../context/AppContext';
 
 interface Props {
-  stockClient: StockClient;
+  shares: Share[];
+  reloadShares: any;
 }
 
-export default function SharesTable({ stockClient }: Props) {
-  const { user } = useContext(AppContext);
-  const [shares, setShares] = useState<Share[]>([]);
-
+export default function SharesTable({ shares, reloadShares }: Props) {
   useEffect(() => {
-    const fetchShares = async () => {
-      setShares(await trackPromise(stockClient.getHoldings(user)));
-    };
-
-    fetchShares();
+    reloadShares();
   }, []);
 
   const holdingsValue: number | null = shares.filter((share: Share) => share.value).length === shares.length
