@@ -13,7 +13,7 @@ function App() {
     if (user) {
       userHandler.authenticate(user);
     }
-  }, [user]);
+  }, [user, userHandler]);
 
   const logout = () => {
     userHandler.logout();

@@ -21,6 +21,11 @@ export default function BalanceTopUp({ user, stockClient, setBalance }: Props) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (!topUpBalance) {
+      handleModalClose();
+      return;
+    }
+
     const newBalance = await trackPromise(stockClient.sendTransaction(user, topUpBalance));
     setBalance(newBalance);
 

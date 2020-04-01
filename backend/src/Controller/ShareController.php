@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 /**
  * @Route("/shares")
@@ -37,9 +38,17 @@ class ShareController
         $response = [];
 
         foreach ($shares as $share) {
+            $totalValue = null;
+            try {
+                $details = $this->sharesService->getDetails($share->getName());
+                $totalValue = $details->getPrice() * $share->getQuantity();
+            } catch (Throwable $exception) {}
+
             $response[] = [
+                'id' => $share->getId(),
                 'name' => $share->getName(),
                 'quantity' => $share->getQuantity(),
+                'value' => $totalValue,
                 'last_update' => $share->getUpdatedAt()->format('c'),
             ];
         }

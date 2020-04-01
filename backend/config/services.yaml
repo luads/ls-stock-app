@@ -2,7 +2,7 @@ parameters:
     alpha_vantage.api.host: https://www.alphavantage.co
     alpha_vantage.api.key: '%env(ALPHA_VANTAGE_API_KEY)%'
     share.redis.url: '%env(REDIS_URL)%'
-    share.redis.ttl: 600 # 10 Minutes cache
+    share.redis.ttl: 3600 # 1 Hour cache, for testing purposes
 
 services:
     _defaults:

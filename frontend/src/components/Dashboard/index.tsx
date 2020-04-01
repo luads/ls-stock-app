@@ -3,6 +3,7 @@ import {Button, Grid, LinearProgress, Typography} from '@material-ui/core';
 import StockClient from '../../clients/StockClient';
 import Balance from '../Balance';
 import BalanceTopUp from '../BalanceTopUp';
+import SharesTable from '../SharesTable';
 import {usePromiseTracker} from 'react-promise-tracker';
 
 interface Props {
@@ -33,6 +34,7 @@ export default function Dashboard({ user, logout }: Props) {
         </Grid>
       </Grid>
 
+      <SharesTable user={user} stockClient={stockClient}/>
 
       {promiseInProgress && <LinearProgress className="loader"/>}
     </div>

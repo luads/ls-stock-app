@@ -34,4 +34,10 @@ export default class StockClient {
 
     return parseFloat(response.data.balance);
   }
+
+  async getHoldings(user: string): Promise<Share[]> {
+    const response = await this.httpClient.get('/v1/shares', { headers: { 'X-User': user } });
+
+    return response.data as Share[];
+  }
 }
