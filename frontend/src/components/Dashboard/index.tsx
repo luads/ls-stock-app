@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {Button, Grid, LinearProgress, Typography} from '@material-ui/core';
 import StockClient from '../../clients/StockClient';
 import Balance from '../Balance';
+import BalanceTopUp from '../BalanceTopUp';
+import {usePromiseTracker} from 'react-promise-tracker';
 
 interface Props {
   user: string;
@@ -9,23 +11,30 @@ interface Props {
 }
 
 export default function Dashboard({ user, logout }: Props) {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [balance, setBalance] = useState<number>(0);
   const stockClient = new StockClient();
+  const { promiseInProgress } = usePromiseTracker();
 
   return (
     <div className="dashboard">
       <Grid container spacing={3} direction="row" justify="center" alignItems="center">
         <Grid item xs={9}>
           <Typography variant="subtitle1">
-            Hello {user}! <Balance user={user} stockClient={stockClient} setIsLoading={setIsLoading}/>
+            Hello {user}! <Balance balance={balance}/>
           </Typography>
         </Grid>
         <Grid item xs={3}>
+          <BalanceTopUp
+            user={user}
+            stockClient={stockClient}
+            setBalance={setBalance}
+          />
           <Button onClick={logout} className="logout">Logout</Button>
         </Grid>
       </Grid>
 
-      { isLoading && <LinearProgress className="loader" /> }
+
+      {promiseInProgress && <LinearProgress className="loader"/>}
     </div>
   );
 }
