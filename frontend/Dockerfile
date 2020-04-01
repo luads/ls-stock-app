@@ -1,8 +1,9 @@
 FROM node:12.6.0-alpine
 
-WORKDIR /app
-
+ARG DEV
 ENV PATH /app/node_modules/.bin:$PATH
+
+WORKDIR /app
 
 RUN apk update
 RUN apk add python
@@ -15,6 +16,8 @@ RUN npm i -g serve
 
 COPY . ./
 
-RUN npm run build
+RUN if [ "$DEV" != true ]; then \
+    npm run build; \
+    fi
 
 ENTRYPOINT ["sh", "/app/bin/run.sh"]
