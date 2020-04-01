@@ -9,9 +9,10 @@ import {AppContext} from '../../context/AppContext';
 interface Props {
   stockClient: StockClient;
   setBalance(balance: number): void;
+  reloadBalance: any;
 }
 
-export default function BalanceTopUp({ stockClient, setBalance }: Props) {
+export default function BalanceTopUp({ stockClient, setBalance, reloadBalance }: Props) {
   const { user } = useContext(AppContext);
   const displayAlert = useDisplayAlert();
   const [isModalOpen, setModalOpen] = React.useState(false);
@@ -46,11 +47,7 @@ export default function BalanceTopUp({ stockClient, setBalance }: Props) {
   };
 
   useEffect(() => {
-    const fetchBalance = async () => {
-      setBalance(await trackPromise(stockClient.getBalance(user)));
-    };
-
-    fetchBalance();
+    reloadBalance();
   }, []);
 
   return (

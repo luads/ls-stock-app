@@ -13,10 +13,16 @@ export default function SharesTableItem({ share }: Props) {
       <TableCell>{share.name}</TableCell>
       <TableCell>{share.quantity}</TableCell>
       <TableCell align="right">
-        { share.value ? (
-          <NumberFormat value={share.value} displayType={'text'} thousandSeparator={true} decimalScale={2}
-                        fixedDecimalScale={true} prefix={'$'} />
-        ) : 'Unavailable' }
+        {share.value ? (
+          <NumberFormat
+            value={share.value}
+            displayType={'text'}
+            thousandSeparator={true}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            prefix={'$'}
+          />
+        ) : 'Unavailable'}
       </TableCell>
     </TableRow>
   );

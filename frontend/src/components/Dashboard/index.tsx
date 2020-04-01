@@ -22,8 +22,12 @@ export default function Dashboard({ logout }: Props) {
   const stockClient = new StockClient();
   const { promiseInProgress } = usePromiseTracker();
 
+  const reloadBalance = async () => {
+    setBalance(await trackPromise(stockClient.getBalance(user)));
+  };
+
   const reloadShares = async () => {
-      setShares(await trackPromise(stockClient.getHoldings(user)));
+    setShares(await trackPromise(stockClient.getHoldings(user)));
   };
 
   return (
@@ -35,13 +39,13 @@ export default function Dashboard({ logout }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={3}>
-          <BalanceTopUp stockClient={stockClient} setBalance={setBalance}/>
+          <BalanceTopUp stockClient={stockClient} setBalance={setBalance} reloadBalance={reloadBalance}/>
           <Button onClick={logout} className="logout">Logout</Button>
         </Grid>
       </Grid>
 
       <SharesTable shares={shares} reloadShares={reloadShares}/>
-      <SharePurchase stockClient={stockClient} reloadShares={reloadShares}/>
+      <SharePurchase stockClient={stockClient} reloadShares={reloadShares} reloadBalance={reloadBalance}/>
 
       {promiseInProgress && <LinearProgress className="loader"/>}
 

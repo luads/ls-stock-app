@@ -21,9 +21,10 @@ interface Props {
   share: ShareDetail | null;
   setShare: any;
   reloadShares: any;
+  reloadBalance: any;
 }
 
-export default function SharePurchaseDialog({ stockClient, share, setShare, reloadShares }: Props) {
+export default function SharePurchaseDialog({ stockClient, share, setShare, reloadShares, reloadBalance }: Props) {
   const { user } = useContext(AppContext);
   const displayAlert = useDisplayAlert();
   const [sharesToPurchase, setSharesToPurchase] = useState<number>(0);
@@ -44,6 +45,7 @@ export default function SharePurchaseDialog({ stockClient, share, setShare, relo
     try {
       transactionValue = await trackPromise(stockClient.purchase(user, share.name, sharesToPurchase));
       reloadShares();
+      reloadBalance();
     } catch (error) {
       setShare(null);
       displayAlert({ severity: 'error', text: error.message });
