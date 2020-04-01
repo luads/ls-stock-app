@@ -81,6 +81,24 @@ export default class StockClient {
     return parseFloat(transaction_value);
   }
 
+  async sell(user: string, share: string, quantity: number): Promise<number> {
+    const response = await this.httpClient.post(
+      `/v1/shares/${share}/sell`,
+      { quantity },
+      { headers: { 'X-User': user } }
+    );
+
+    this.checkForRateLimitedResponse(response);
+
+    if (response.status === 400) {
+      throw new InsuficcientFundsError(response.data.message);
+    }
+
+    const { transaction_value } = response.data;
+
+    return parseFloat(transaction_value);
+  }
+
   private checkForRateLimitedResponse(response: AxiosResponse): void {
     if (response.status === 429) {
       throw new RateLimitedApiError(`The API reached it's rate limit, try again in a few seconds`);

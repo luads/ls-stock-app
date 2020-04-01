@@ -57,10 +57,7 @@ export default function SharePurchaseDialog({ stockClient, share, setShare, relo
 
     setShare(null);
 
-    displayAlert({
-      severity: 'success',
-      text: alertText,
-    } as AlertDetails)
+    displayAlert({ severity: 'success', text: alertText } as AlertDetails)
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Button, Grid, LinearProgress, Typography} from '@material-ui/core';
 import StockClient from '../../clients/StockClient';
 import Balance from '../Balance';
@@ -30,6 +30,10 @@ export default function Dashboard({ logout }: Props) {
     setShares(await trackPromise(stockClient.getHoldings(user)));
   };
 
+  useEffect(() => {
+    reloadBalance();
+  }, []);
+
   return (
     <div className="dashboard">
       <Grid container spacing={3} direction="row" justify="center" alignItems="center">
@@ -39,12 +43,12 @@ export default function Dashboard({ logout }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={3}>
-          <BalanceTopUp stockClient={stockClient} setBalance={setBalance} reloadBalance={reloadBalance}/>
+          <BalanceTopUp stockClient={stockClient} setBalance={setBalance}/>
           <Button onClick={logout} className="logout">Logout</Button>
         </Grid>
       </Grid>
 
-      <SharesTable shares={shares} reloadShares={reloadShares}/>
+      <SharesTable shares={shares} stockClient={stockClient} reloadShares={reloadShares} reloadBalance={reloadBalance}/>
       <SharePurchase stockClient={stockClient} reloadShares={reloadShares} reloadBalance={reloadBalance}/>
 
       {promiseInProgress && <LinearProgress className="loader"/>}

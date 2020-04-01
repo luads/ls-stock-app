@@ -1,4 +1,4 @@
-import React, {FormEvent, useContext, useEffect} from 'react';
+import React, {FormEvent, useContext, useState} from 'react';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from '@material-ui/core';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import {trackPromise} from 'react-promise-tracker';
@@ -9,14 +9,13 @@ import {AppContext} from '../../context/AppContext';
 interface Props {
   stockClient: StockClient;
   setBalance(balance: number): void;
-  reloadBalance: any;
 }
 
-export default function BalanceTopUp({ stockClient, setBalance, reloadBalance }: Props) {
+export default function BalanceTopUp({ stockClient, setBalance }: Props) {
   const { user } = useContext(AppContext);
   const displayAlert = useDisplayAlert();
-  const [isModalOpen, setModalOpen] = React.useState(false);
-  const [topUpBalance, setTopUpBalance] = React.useState<number>(0);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [topUpBalance, setTopUpBalance] = useState<number>(0);
 
   const handleModalClose = () => {
     setModalOpen(false);
@@ -45,10 +44,6 @@ export default function BalanceTopUp({ stockClient, setBalance, reloadBalance }:
 
     handleModalClose();
   };
-
-  useEffect(() => {
-    reloadBalance();
-  }, []);
 
   return (
     <>

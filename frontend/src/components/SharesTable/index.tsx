@@ -13,13 +13,16 @@ import {
 import SharesTableItem from '../SharesTableItem';
 import Share from '../../interfaces/Share';
 import NumberFormat from 'react-number-format';
+import StockClient from '../../clients/StockClient';
 
 interface Props {
   shares: Share[];
+  stockClient: StockClient;
   reloadShares: any;
+  reloadBalance: any;
 }
 
-export default function SharesTable({ shares, reloadShares }: Props) {
+export default function SharesTable({ shares, stockClient, reloadShares, reloadBalance }: Props) {
   useEffect(() => {
     reloadShares();
   }, []);
@@ -38,17 +41,26 @@ export default function SharesTable({ shares, reloadShares }: Props) {
               <TableRow>
                 <TableCell>Symbol</TableCell>
                 <TableCell>Shares</TableCell>
+                <TableCell>Operations</TableCell>
                 <TableCell align="right">Current value</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {shares.map(share => {
-                return (<SharesTableItem key={share.id} share={share}/>)
+                return (
+                  <SharesTableItem
+                    key={share.id}
+                    share={share}
+                    stockClient={stockClient}
+                    reloadShares={reloadShares}
+                    reloadBalance={reloadBalance}
+                  />
+                )
               })}
             </TableBody>
             <TableFooter>
               <TableRow>
-                <TableCell align="right" colSpan={3}>
+                <TableCell align="right" colSpan={4}>
                   {holdingsValue ? (
                     <>
                       <strong>Total: </strong>
