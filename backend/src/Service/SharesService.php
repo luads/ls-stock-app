@@ -36,9 +36,10 @@ class SharesService
         $share = $this->getDetails($shareName);
         $value = $share->getPrice() * $quantity * -1;
 
+        $transaction = $this->transactionService->push($user, $value, Transaction::OPERATION_PURCHASE);
         $this->shareModel->createOrUpdate($user, $shareName, $quantity);
 
-        return $this->transactionService->push($user, $value, Transaction::OPERATION_PURCHASE);
+        return $transaction;
     }
 
     public function sell(string $user, string $shareName, int $quantity): Transaction

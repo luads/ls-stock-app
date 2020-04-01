@@ -1,7 +1,8 @@
-import axios, {AxiosInstance} from 'axios';
+import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import Share from '../interfaces/Share';
 import RateLimitedApiError from '../errors/RateLimitedApiError';
 import ShareDetail from '../interfaces/ShareDetail';
+import InsuficcientFundsError from '../errors/InsuficcientFundsError';
 
 export default class StockClient {
   private httpClient: AxiosInstance;
@@ -15,7 +16,7 @@ export default class StockClient {
     this.httpClient = axios.create({
       baseURL: this.host,
       timeout: 30000, // Heroku can be slow when warming up :)
-      validateStatus: (status: number) => true,
+      validateStatus: () => true,
       headers: {
         'Content-type': 'application/json',
       }
@@ -35,6 +36,10 @@ export default class StockClient {
       { headers: { 'X-User': user } }
     );
 
+    if (response.status === 400) {
+      throw new InsuficcientFundsError(response.data.message);
+    }
+
     return parseFloat(response.data.balance);
   }
 
@@ -49,14 +54,36 @@ export default class StockClient {
       `/v1/shares/${name.toLocaleUpperCase()}`,
       { headers: { 'X-User': user } });
 
-    if (response.status === 429) {
-      throw new RateLimitedApiError(`The API reached it's rate limit, try again in a few seconds`);
-    }
+    this.checkForRateLimitedResponse(response);
 
     if (response.status === 404) {
       return null;
     }
 
     return response.data as ShareDetail;
+  }
+
+  async purchase(user: string, share: string, quantity: number): Promise<number> {
+    const response = await this.httpClient.post(
+      `/v1/shares/${share}/purchase`,
+      { quantity },
+      { headers: { 'X-User': user } }
+    );
+
+    this.checkForRateLimitedResponse(response);
+
+    if (response.status === 400) {
+      throw new InsuficcientFundsError(response.data.message);
+    }
+
+    const { transaction_value } = response.data;
+
+    return parseFloat(transaction_value);
+  }
+
+  private checkForRateLimitedResponse(response: AxiosResponse): void {
+    if (response.status === 429) {
+      throw new RateLimitedApiError(`The API reached it's rate limit, try again in a few seconds`);
+    }
   }
 }

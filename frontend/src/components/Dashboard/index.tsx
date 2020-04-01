@@ -6,7 +6,6 @@ import BalanceTopUp from '../BalanceTopUp';
 import SharesTable from '../SharesTable';
 import {usePromiseTracker} from 'react-promise-tracker';
 import SharePurchase from '../SharePurchase';
-import {useDisplayAlert} from '../../hooks/useDisplayAlert';
 import {Alert} from '@material-ui/lab';
 import {AppContext} from '../../context/AppContext';
 
@@ -29,15 +28,13 @@ export default function Dashboard({ logout }: Props) {
           </Typography>
         </Grid>
         <Grid item xs={3}>
-          <BalanceTopUp
-            stockClient={stockClient}
-            setBalance={setBalance}
-          />
+          <BalanceTopUp stockClient={stockClient} setBalance={setBalance}/>
           <Button onClick={logout} className="logout">Logout</Button>
         </Grid>
       </Grid>
 
       <SharesTable stockClient={stockClient}/>
+      <SharePurchase stockClient={stockClient}/>
 
       {promiseInProgress && <LinearProgress className="loader"/>}
 

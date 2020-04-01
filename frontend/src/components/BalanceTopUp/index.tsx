@@ -29,7 +29,15 @@ export default function BalanceTopUp({ stockClient, setBalance }: Props) {
       return;
     }
 
-    const newBalance = await trackPromise(stockClient.sendTransaction(user, topUpBalance));
+    let newBalance;
+
+    try {
+      newBalance = await trackPromise(stockClient.sendTransaction(user, topUpBalance));
+    } catch (error) {
+      displayAlert({ severity: 'error', text: error.message });
+      handleModalClose();
+      return;
+    }
 
     displayAlert({ severity: 'success', text: 'Balance transaction handled successfully!'} as AlertDetails);
     setBalance(newBalance);
@@ -56,6 +64,7 @@ export default function BalanceTopUp({ stockClient, setBalance }: Props) {
           <DialogTitle id="form-dialog-title">Top up your balance</DialogTitle>
           <DialogContent>
             <TextField
+              required={true}
               autoFocus
               margin="dense"
               id="balance-transaction"
