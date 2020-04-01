@@ -131,7 +131,7 @@ export default function SharesTableItem({ share, stockClient, reloadShares, relo
                 <Button onClick={handleModalClose}>
                   Cancel
                 </Button>
-                <Button type="submit" color="primary">
+                <Button color="primary" type="submit">
                   Process
                 </Button>
               </DialogActions>

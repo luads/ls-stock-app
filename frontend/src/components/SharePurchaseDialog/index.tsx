@@ -103,7 +103,7 @@ export default function SharePurchaseDialog({ stockClient, share, setShare, relo
               <Button onClick={handleModalClose}>
                 Cancel
               </Button>
-              <Button onClick={handleModalClose} color="primary">
+              <Button color="primary" type="submit">
                 Process
               </Button>
             </DialogActions>
