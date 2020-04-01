@@ -46,3 +46,16 @@ Overall architecture
 The project has isolated API and UI components. It also has a SQLite database layer and a Redis cache so the external API is not flooded with requests.
 
 ![C4 Level 2 - Stock App](docs/resources/components.png?raw=true)
+
+Deployment
+---
+
+The deployment strategy was to push the container as is to Heroku. A free Redis add-on was enabled and attached to the API. If you have access to the deployment project, you can run a deploy by going inside the UI or API folders and running:
+
+```sh
+make deploy
+```
+
+This will build the image specifically for the production environment and push it to Heroku's Docker container repository.
+
+A live version is available at https://ls-stock-ui.herokuapp.com. 
