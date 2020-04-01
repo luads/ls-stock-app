@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\EventListener;
 
 use App\Share\Exception\RateLimitedException;
+use App\Share\Exception\ShareNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +21,10 @@ class ApiExceptionSubscriber implements EventSubscriberInterface
 
         if ($exception instanceof RateLimitedException) {
             $statusCode = Response::HTTP_TOO_MANY_REQUESTS;
+        }
+
+        if ($exception instanceof ShareNotFoundException) {
+            $statusCode = Response::HTTP_NOT_FOUND;
         }
 
         $response = new JsonResponse(['message' => $exception->getMessage()], $statusCode);
