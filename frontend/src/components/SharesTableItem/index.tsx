@@ -29,7 +29,7 @@ export default function SharesTableItem({ share, stockClient, reloadShares, relo
   const displayAlert = useDisplayAlert();
   const [shareDetails, setShareDetails] = useState<ShareDetail | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [sharesToSell, setSharesToSell] = useState<number>(0);
+  const [sharesToSell, setSharesToSell] = useState<number>(share.quantity);
 
   const handleModalClose = () => {
     setModalOpen(false);
@@ -111,6 +111,7 @@ export default function SharesTableItem({ share, stockClient, reloadShares, relo
                   label="Amount"
                   type="number"
                   fullWidth
+                  value={sharesToSell}
                   onChange={(e) => setSharesToSell(parseInt(e.target.value))}
                 /><br/>
                 <br/>
